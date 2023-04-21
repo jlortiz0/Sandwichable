@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.items;
 
+import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
@@ -55,9 +56,11 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
             if(stack.getNbt().getCompound("bucketData") != null) {
                 NbtCompound tag = stack.getNbt().getCompound("bucketData").copy();
                 int pct;
-                CheeseType type;
+                CheeseType type = null;
                 pct = tag.getInt("percentFermented");
-                type = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent")).getCheeseType();
+                BasinContent c = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent"));
+                if (c != null)
+                    type = c.getCheeseType();
                 tooltip.add(new TranslatableText("fermenting_milk_bucket.tooltip.pct_fermented", pct).formatted(Formatting.BLUE));
                 if (type != null) {
                     tooltip.add(new TranslatableText("cheese.type." + type.toString()).formatted(Formatting.BLUE));
